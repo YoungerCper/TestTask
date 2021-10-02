@@ -18,11 +18,14 @@ public class RequestAndParsePage extends Thread{
 
     private final String address;
     private final IConnectToServer connectToServer;
+    private final int countPage;
 
-    public RequestAndParsePage(String address, IConnectToServer connectToServer)
+    public RequestAndParsePage(String address, IConnectToServer connectToServer, int countPage)
     {
         this.address = address;
         this.connectToServer = connectToServer;
+
+        this.countPage = countPage;
     }
 
     public void run()
@@ -31,7 +34,7 @@ public class RequestAndParsePage extends Thread{
         try {
             Movie[] movies = this.parseMovies(JsonString);
             ArrayList<Movie> res = new ArrayList<Movie>(Arrays.asList(movies));
-            this.connectToServer.subTotal(res);
+            this.connectToServer.subTotal(res, 100.0 / this.countPage);
         } catch (IOException e) {
             this.connectToServer.finishError();
         }

@@ -33,8 +33,8 @@ public class RequestDataWithEmptyString extends Thread
 
     public void run()
     {
-        this.connectToServer.startConnecting();
         String JsonString = this.request();
+        this.connectToServer.startConnecting();
         this.parsePageCount(JsonString);
         this.parseMovies();
     }
@@ -87,22 +87,31 @@ public class RequestDataWithEmptyString extends Thread
 
     private void parseMovies()
     {
-        RequestAndParsePage[] p = new RequestAndParsePage[5];
-        for(int i = 0; i < 5; i++)
+        int countOfThread = Math.min(40, this.countOgPages);
+        RequestAndParsePage[] p = new RequestAndParsePage[countOfThread];
+        int count = 0;
+
+        for(int i = 0; count < this.countOgPages; i = ( i + 1) % countOfThread)
         {
-            System.out.println(i);
-            p[i] = new RequestAndParsePage(this.address + "&" + ServerConsts.WORD_PAGE + "=" + Integer.toString(i + 1), this.connectToServer);
-            p[i].start();
+            if(p[i] == null || !p[i].isAlive())
+            {
+                System.out.println(count);
+                p[i] = new RequestAndParsePage(this.address + "&" + ServerConsts.WORD_PAGE + "=" + Integer.toString(count + 1), this.connectToServer, this.countOgPages);
+                count++;
+                p[i].start();
+            }
         }
+
         boolean d = true;
         while(d) {
             d = false;
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < countOfThread; i++) {
                 d = d || p[i].isAlive();
             }
         }
-        System.out.println("ok");
+
+
         this.connectToServer.finishSuccessful();
     }
 }

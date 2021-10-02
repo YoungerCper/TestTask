@@ -2,6 +2,7 @@ package com.example.testtask;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,8 @@ import android.widget.ListView;
 
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,7 @@ public class ListFilmsActivity extends AppCompatActivity {
     private ArrayList<Movie> movies;
     private MoviesAdapter adapter;
     private Handler mProgressHandler;
+    private Handler mProgressBarHandler;
 
     private Context mainContext = this;
 
@@ -55,9 +59,13 @@ public class ListFilmsActivity extends AppCompatActivity {
             this.newMovie = new ArrayList<Movie>();
         }
 
+        public class F{
+            public final float f;
+            public F(float f){this.f = f;}
+        }
+
         @Override
         public void startConnecting(){
-
             movies = this.newMovie;
             Message msg;
             msg = Message.obtain();
@@ -88,16 +96,19 @@ public class ListFilmsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void subTotal(ArrayList<Movie> newMovies){
+        public void subTotal(ArrayList<Movie> newMovies, double percent){
             this.newMovie.addAll(newMovies);
             movies = this.newMovie;
             Message msg;
             msg = Message.obtain();
             msg.what = 2;
+            msg.obj = (float)percent;
             mProgressHandler.sendMessage(msg);
         }
+
     }
 
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +119,7 @@ public class ListFilmsActivity extends AppCompatActivity {
         this._scrollView = findViewById(R.id.moviesSpace);
         this._progressBar = findViewById(R.id.progressBar);
 
-        UpdateMovieListCommand firstUpdate = new UpdateMovieListCommand(new ListFilmsActivityRequestListener());
-        firstUpdate.start();
+
 
         movies = new ArrayList<Movie>();
         adapter = new MoviesAdapter(this, movies);
@@ -117,15 +127,16 @@ public class ListFilmsActivity extends AppCompatActivity {
 
         mProgressHandler = new Handler() {
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NotNull Message msg) {
                 System.out.println(msg.what);
                 switch (msg.what) {
                     case 1:
                         adapter = new MoviesAdapter(mainContext, movies);
                         _scrollView.setAdapter(adapter);
+                        _progressBar.setProgress(0);
                         break;
                     case 2:
-                        _progressBar.setProgress(_progressBar.getProgress() + 20);
+                        _progressBar.setProgress(_progressBar.getProgress() + (float)msg.obj);
                         break;
                     case 3:
                         _progressBar.setProgress(0);
@@ -134,6 +145,10 @@ public class ListFilmsActivity extends AppCompatActivity {
                 super.handleMessage(msg);
             }
         };
+
+
+        UpdateMovieListCommand firstUpdate = new UpdateMovieListCommand(new ListFilmsActivityRequestListener());
+        firstUpdate.start();
 
         this._searchButton.setOnClickListener(new ListFilmsActivityClickListener());
     }

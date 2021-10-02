@@ -31,11 +31,11 @@
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        app:rcBackgroundColor="#0A000000"
-        app:rcProgressColor="#EF5350"
+        app:rcBackgroundColor="#0A0000"
+        app:rcProgressColor="#fde910"
         app:rcAnimationEnable="true"
         app:rcAnimationSpeedScale="1"
-        app:rcMax="100"/>
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

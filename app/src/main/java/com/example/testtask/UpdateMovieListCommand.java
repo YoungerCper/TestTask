@@ -27,6 +27,11 @@ public class UpdateMovieListCommand
             RequestDataWithEmptyString r = new RequestDataWithEmptyString(this.whatDo);
             r.start();
         }
+        else
+        {
+            RequestDataWithQuaery r = new RequestDataWithQuaery(this.whatDo, query);
+            r.start();
+        }
     }
 
 }
