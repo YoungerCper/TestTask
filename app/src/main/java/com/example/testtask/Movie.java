@@ -1,5 +1,14 @@
 package com.example.testtask;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Movie {
     
     public String poster_path;
@@ -17,6 +26,16 @@ public class Movie {
     public String original_title;
     public String original_language;
 
+    public Bitmap imageMap = null;
 
+    public void setImageMap(Bitmap bm)
+    {
+        this.imageMap = bm;
+    }
+
+    public String getImageUrl()
+    {
+        return ServerConsts.IMAGE_MAIN_PART_ADDRESS + this.poster_path;
+    }
 
 }

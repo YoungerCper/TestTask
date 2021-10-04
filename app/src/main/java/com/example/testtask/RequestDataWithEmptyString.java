@@ -110,8 +110,6 @@ public class RequestDataWithEmptyString extends Thread
                 d = d || p[i].isAlive();
             }
         }
-
-
         this.connectToServer.finishSuccessful();
     }
 }

@@ -1,12 +1,23 @@
 package com.example.testtask;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -15,6 +26,7 @@ public class MoviesAdapter extends ArrayAdapter {
     private Context context;
     private ArrayList<Movie> listOfMovie;
     private LayoutInflater inflater;
+
 
     public MoviesAdapter(Context context, ArrayList<Movie> movies)
     {
@@ -50,6 +62,11 @@ public class MoviesAdapter extends ArrayAdapter {
         Movie m = (Movie)this.getItem(position);
         TextView t = view.findViewById(R.id.titleFilm);
         TextView t2 = view.findViewById(R.id.description);
+        ImageView poster = view.findViewById(R.id.posterInList);
+        System.out.println(m.poster_path);
+
+
+
         t2.setText(m.overview);
         t.setText(m.title);
         return view;
