@@ -2,6 +2,7 @@ package com.example.testtask;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -27,6 +29,9 @@ public class MoviesAdapter extends ArrayAdapter {
     private ArrayList<Movie> listOfMovie;
     private LayoutInflater inflater;
 
+    private ImageLoader imageLoader = ImageLoader.getInstance();
+    private Bitmap defaultBm;
+
 
     public MoviesAdapter(Context context, ArrayList<Movie> movies)
     {
@@ -34,6 +39,8 @@ public class MoviesAdapter extends ArrayAdapter {
         this.context = context;
         this.listOfMovie = movies;
         this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        this.defaultBm = imageLoader.loadImageSync("https://cs4.pikabu.ru/images/previews_comm/2015-06_2/14339500161051.png");
     }
 
     @Override
@@ -60,12 +67,24 @@ public class MoviesAdapter extends ArrayAdapter {
             view = this.inflater.inflate(R.layout.component_movie_for_list, parent, false);
         }
         Movie m = (Movie)this.getItem(position);
+
         TextView t = view.findViewById(R.id.titleFilm);
         TextView t2 = view.findViewById(R.id.description);
         ImageView poster = view.findViewById(R.id.posterInList);
+        LinearLayout l = view.findViewById(R.id.box);
+
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetalsActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
         System.out.println(m.poster_path);
 
-
+        poster.setImageBitmap(this.defaultBm);
+        imageLoader.displayImage(m.getImageUrl(), poster);
 
         t2.setText(m.overview);
         t.setText(m.title);

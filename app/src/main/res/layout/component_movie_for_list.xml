@@ -3,31 +3,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
-
-    <TextView
-        android:id="@+id/titleFilm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Название"
-        android:textColor="@color/black"
-        android:textSize="12pt"/>
+    android:background="@color/white"
+    android:id="@+id/box">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/posterInList"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
+            android:orientation="vertical"
+            android:layout_weight="3">
+
+            <ImageView
+                android:id="@+id/posterInList"
+                android:layout_gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+            />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleFilm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Название"
+                android:textColor="@color/black"
+                android:textSize="12pt"/>
 
 
             <TextView
@@ -39,11 +54,7 @@
                 android:textSize="6pt"/>
         </LinearLayout>
 
-        <RadioButton
-            android:gravity="center"
-            android:layout_weight="3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
 

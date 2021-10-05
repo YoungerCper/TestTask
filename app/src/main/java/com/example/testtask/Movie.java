@@ -26,13 +26,6 @@ public class Movie {
     public String original_title;
     public String original_language;
 
-    public Bitmap imageMap = null;
-
-    public void setImageMap(Bitmap bm)
-    {
-        this.imageMap = bm;
-    }
-
     public String getImageUrl()
     {
         return ServerConsts.IMAGE_MAIN_PART_ADDRESS + this.poster_path;

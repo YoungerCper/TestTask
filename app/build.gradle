@@ -40,6 +40,7 @@ dependencies {
     implementation files('libs\\moshi-1.12.0.jar')
     implementation files('libs\\universal-image-loader-1.9.5.jar')
     implementation files('libs\\universal-image-loader-1.9.5.jar')
+    implementation files('libs\\devsmartlib.jar')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

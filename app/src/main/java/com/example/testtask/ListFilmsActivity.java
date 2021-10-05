@@ -14,6 +14,8 @@ import android.widget.ListView;
 
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -119,7 +121,8 @@ public class ListFilmsActivity extends AppCompatActivity {
         this._scrollView = findViewById(R.id.moviesSpace);
         this._progressBar = findViewById(R.id.progressBar);
 
-
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
 
         movies = new ArrayList<Movie>();
         adapter = new MoviesAdapter(this, movies);
