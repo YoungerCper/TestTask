@@ -31,7 +31,7 @@ public class RequestCreditsFilm extends Thread{
         String JsonString = this.connectFromAddress();
         try {
             CreditsMovie movie = this.parseMovie(JsonString);
-            this.connectToServer.finishSuccessful(null);
+            this.connectToServer.finishSuccessful(movie);
         } catch (IOException e) {
             this.connectToServer.finishError();
         }

@@ -74,6 +74,7 @@ public class DetailsActivity extends AppCompatActivity {
         RequestDetailsAboutFilm rd = new RequestDetailsAboutFilm(this.filmId, new IConnectToServerDetails() {
             @Override
             public void finishSuccessful(MovieDetailsParent m) {
+                detailsMovie = (DetailsMovie)m;
                 Message msg = new Message();
                 msg.what = 1;
                 handler.sendMessage(msg);
@@ -88,6 +89,7 @@ public class DetailsActivity extends AppCompatActivity {
         RequestCreditsFilm rc = new RequestCreditsFilm(this.filmId, new IConnectToServerDetails() {
             @Override
             public void finishSuccessful(MovieDetailsParent m) {
+                creditsMovie = (CreditsMovie)m;
                 Message msg = new Message();
                 msg.what = 2;
                 handler.sendMessage(msg);
@@ -102,6 +104,7 @@ public class DetailsActivity extends AppCompatActivity {
         RequestVideoFilm rv = new RequestVideoFilm(this.filmId, new IConnectToServerDetails() {
             @Override
             public void finishSuccessful(MovieDetailsParent m) {
+                videoMovie = (VideoMovie)m;
                 Message msg = new Message();
                 msg.what = 3;
                 handler.sendMessage(msg);
@@ -116,6 +119,7 @@ public class DetailsActivity extends AppCompatActivity {
         RequestImageFilm ri = new RequestImageFilm(this.filmId, new IConnectToServerDetails() {
             @Override
             public void finishSuccessful(MovieDetailsParent m) {
+                imageMovie = (ImageMovie)m;
                 Message msg = new Message();
                 msg.what = 4;
                 handler.sendMessage(msg);
@@ -130,6 +134,7 @@ public class DetailsActivity extends AppCompatActivity {
         RequestReviewsFilm rr = new RequestReviewsFilm(this.filmId, new IConnectToServerDetails() {
             @Override
             public void finishSuccessful(MovieDetailsParent m) {
+                reviewsMovie = (ReviewsMovie)m;
                 Message msg = new Message();
                 msg.what = 5;
                 handler.sendMessage(msg);

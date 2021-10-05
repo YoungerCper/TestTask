@@ -30,7 +30,7 @@ public class RequestDetailsAboutFilm extends Thread {
         String JsonString = this.connectFromAddress();
         try {
             DetailsMovie movie = this.parseMovie(JsonString);
-            this.connectToServer.finishSuccessful(null);
+            this.connectToServer.finishSuccessful(movie);
         } catch (IOException e) {
             this.connectToServer.finishError();
         }
