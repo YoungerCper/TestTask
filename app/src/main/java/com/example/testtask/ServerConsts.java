@@ -13,4 +13,9 @@ public class ServerConsts {
     public static final String WORD_MOVIE = "movie";
     public static final String WORD_SEARCH = "search";
     public static final String WORD_QUERY = "query";
+    public static final String WORD_IMAGES = "images";
+    public static final String WORD_CREDITS = "credits";
+    public static final String WORD_VIDEOS = "videos";
+    public static final String WORD_REVIEWS = "reviews";
+
 }

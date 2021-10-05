@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
-import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 

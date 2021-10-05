@@ -9,5 +9,6 @@ public interface IConnectToServer
     void finishSuccessful();
     void finishError();
 
-    void subTotal(ArrayList<Movie> newMovies, double percent);
+    default void subTotal(ArrayList<Movie> newMovies, double percent){return;}
+
 }

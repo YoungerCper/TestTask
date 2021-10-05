@@ -76,7 +76,9 @@ public class MoviesAdapter extends ArrayAdapter {
         l.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DetalsActivity.class);
+                Intent intent = new Intent(context, DetailsActivity.class);
+                assert m != null;
+                intent.putExtra("filmId", m.id);
                 context.startActivity(intent);
             }
         });
