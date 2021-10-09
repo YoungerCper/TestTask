@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">TestTask</string>
     <string name="description">Описание</string>
+    <string name="mainData">Информация</string>
+    <string name="releaseDate">Дата выхода</string>
+    <string name="budget">Бюджет</string>
+    <string name="genres">Жанры</string>
+    <string name="load">Загрузка</string>
+    <string name="tryAgain">Повторить попытку</string>
+
+    <string name="error">Произощла какая-то ошибка, повторите попытку</string>
 </resources>

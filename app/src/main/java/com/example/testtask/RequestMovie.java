@@ -9,13 +9,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class RequestDetailsAboutFilm extends Thread {
+public class RequestMovie<T extends MovieDetailsParent> extends Thread{
 
-    private final int idFilm;
-    private final String address;
-    private final IConnectToServerDetails connectToServer;
+    protected final int idFilm;
+    protected final String address;
+    protected final IConnectToServerDetails connectToServer;
+    protected final Class<T> aboutT;
 
-    public RequestDetailsAboutFilm(int id, IConnectToServerDetails connectToServer){
+    public RequestMovie(int id, IConnectToServerDetails connectToServer, Class<T> aboutT){
         this.idFilm = id;
         this.address = ServerConsts.MAIN_PART_ADDRESS
                 + ServerConsts.WORD_MOVIE + "/"
@@ -23,20 +24,37 @@ public class RequestDetailsAboutFilm extends Thread {
                 + ServerConsts.WORD_API_KEY + "=" + ServerConsts.API_KEY + "&"
                 + ServerConsts.LANG;
         this.connectToServer = connectToServer;
+        this.aboutT = aboutT;
     }
 
     @Override
     public void run(){
         String JsonString = this.connectFromAddress();
         try {
-            DetailsMovie movie = this.parseMovie(JsonString);
+            T movie = this.parseMovie(JsonString);
             this.connectToServer.finishSuccessful(movie);
         } catch (IOException e) {
             this.connectToServer.finishError();
         }
     }
 
-    private String connectFromAddress()
+
+
+    private T parseMovie(String JsonString) throws IOException {
+        try {
+            Moshi moshi = new Moshi.Builder().build();
+            JsonAdapter<T> adapter = moshi.adapter(this.aboutT);
+
+            T movie = adapter.fromJson(JsonString);
+            return movie;
+        }
+        catch (Exception e){
+            this.connectToServer.finishError();
+            return null;
+        }
+    }
+
+    protected String connectFromAddress()
     {
         URL url = null;
         try {
@@ -68,13 +86,4 @@ public class RequestDetailsAboutFilm extends Thread {
         }
         return null;
     }
-
-    private DetailsMovie parseMovie(String JsonString) throws IOException {
-        Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<DetailsMovie> adapter = moshi.adapter(DetailsMovie.class);
-
-        DetailsMovie movie = adapter.fromJson(JsonString);
-        return movie;
-    }
-
 }
