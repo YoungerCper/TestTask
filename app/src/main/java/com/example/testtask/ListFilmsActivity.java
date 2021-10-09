@@ -3,6 +3,7 @@ package com.example.testtask;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,17 +25,37 @@ public class ListFilmsActivity extends AppCompatActivity {
 
     private EditText _searchInput;
     private ImageButton _searchButton;
-    private ListView _scrollView;
     private IconRoundCornerProgressBar _progressBar;
 
-    private ArrayList<Movie> movies;
-    private MoviesAdapter adapter;
-    private Handler mProgressHandler;
-    private Handler mProgressBarHandler;
+    private MovieListFragment movieListFragment;
+    private LoadFragment loadFragment = new LoadFragment();
+    private ErrorFragment errorFragment = new ErrorFragment(new TryAgain());
+    private FragmentTransaction fTrans;
 
-    private Context mainContext = this;
+    private final Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NotNull Message msg) {
+            fTrans = getFragmentManager().beginTransaction();
+            if(msg.what == 1){
+                fTrans.remove(errorFragment).remove(loadFragment).remove(movieListFragment).add(R.id.listMovieFrame, movieListFragment);
 
-    private boolean withUpdateButton = true;
+            }
+            else{
+                fTrans.remove(errorFragment).remove(loadFragment).remove(movieListFragment).add(R.id.listMovieFrame, errorFragment);
+
+            }
+            fTrans.commit();
+        }
+    };
+
+    class TryAgain implements IClickForTry{
+
+        @Override
+        public void onClick() {
+            fTrans.remove(errorFragment).remove(loadFragment).remove(movieListFragment).add(R.id.listMovieFrame, loadFragment);
+            begin();
+        }
+    }
 
     class ListFilmsActivityClickListener implements View.OnClickListener
     {
@@ -44,69 +65,22 @@ public class ListFilmsActivity extends AppCompatActivity {
             if(v.getId() == R.id.searchButton)
             {
                 String query = _searchInput.getText().toString();
-                UpdateMovieListCommand r = new UpdateMovieListCommand(new ListFilmsActivityRequestListener(), query);
-                r.start();
+                movieListFragment.loadNewList(query);
             }
         }
     }
 
-    class ListFilmsActivityRequestListener implements IConnectToServer
-    {
+    class InteractionProgressBar implements IProgressInteraction{
 
-        public ArrayList<Movie> newMovie;
-
-        public ListFilmsActivityRequestListener()
-        {
-            this.newMovie = new ArrayList<Movie>();
-        }
-
-        public class F{
-            public final float f;
-            public F(float f){this.f = f;}
+        @Override
+        public float getProgress() {
+            return _progressBar.getProgress();
         }
 
         @Override
-        public void startConnecting(){
-            movies = this.newMovie;
-            Message msg;
-            msg = Message.obtain();
-            msg.what = 3;
-            System.out.println(msg.what);
-            mProgressHandler.sendMessage(msg);
+        public void setProgress(float f) {
+            _progressBar.setProgress(f);
         }
-
-        @Override
-        public void finishSuccessful(){
-            movies = this.newMovie;
-            Message msg;
-            msg = Message.obtain();
-            msg.what = 1;
-            System.out.println(msg.what);
-            mProgressHandler.sendMessage(msg);
-            withUpdateButton = false;
-        }
-
-        @Override
-        public void finishError(){
-            if(withUpdateButton){
-                //_scrollView.addHeaderView();
-            }
-            else{
-
-            }
-        }
-
-        @Override
-        public void subTotal(ArrayList<Movie> newMovies, double percent){
-            this.newMovie.addAll(newMovies);
-            movies = this.newMovie;
-            Message msg;
-            msg = Message.obtain();
-            msg.what = 2;
-            msg.obj = (float)percent;
-            mProgressHandler.sendMessage(msg);
-        }
-
     }
 
     @SuppressLint("HandlerLeak")
@@ -115,44 +89,46 @@ public class ListFilmsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_films);
 
-        this._searchButton = findViewById(R.id.searchButton);
-        this._searchInput = findViewById(R.id.searchInput);
-        this._scrollView = findViewById(R.id.moviesSpace);
-        this._progressBar = findViewById(R.id.progressBar);
-
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
 
-        movies = new ArrayList<Movie>();
-        adapter = new MoviesAdapter(this, movies);
-        _scrollView.setAdapter(adapter);
+        this.movieListFragment = new MovieListFragment(new InteractionProgressBar());
 
-        mProgressHandler = new Handler() {
-            @Override
-            public void handleMessage(@NotNull Message msg) {
-                System.out.println(msg.what);
-                switch (msg.what) {
-                    case 1:
-                        adapter = new MoviesAdapter(mainContext, movies);
-                        _scrollView.setAdapter(adapter);
-                        _progressBar.setProgress(0);
-                        break;
-                    case 2:
-                        _progressBar.setProgress(_progressBar.getProgress() + (float)msg.obj);
-                        break;
-                    case 3:
-                        _progressBar.setProgress(0);
-                        break;
-                }
-                super.handleMessage(msg);
-            }
-        };
+        fTrans = getFragmentManager().beginTransaction();
+        fTrans.remove(this.errorFragment).remove(this.loadFragment).remove(this.movieListFragment).add(R.id.listMovieFrame, this.loadFragment);
+        fTrans.commit();
+
+        this._searchButton = findViewById(R.id.searchButton);
+        this._searchInput = findViewById(R.id.searchInput);
+        this._progressBar = findViewById(R.id.progressBar);
 
 
-        UpdateMovieListCommand firstUpdate = new UpdateMovieListCommand(new ListFilmsActivityRequestListener());
-        firstUpdate.start();
+
+        this.begin();
 
         this._searchButton.setOnClickListener(new ListFilmsActivityClickListener());
+    }
+
+    private void begin() {
+        fTrans = getFragmentManager().beginTransaction();
+
+
+        Thread h = new Thread() {
+
+            @Override
+            public void run() {
+                boolean b = movieListFragment.loader();
+                Message msg = new Message();
+                if (b) {
+                    msg.what = 1;
+                }
+                else {
+                    msg.what = 0;
+                }
+                handler.sendMessage(msg);
+            }
+        };
+        h.start();
     }
 
 

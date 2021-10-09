@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class MoviesAdapter extends ArrayAdapter {
 
-    private Context context;
+    private IPressBox context;
     private ArrayList<Movie> listOfMovie;
     private LayoutInflater inflater;
 
@@ -33,12 +33,12 @@ public class MoviesAdapter extends ArrayAdapter {
     private Bitmap defaultBm;
 
 
-    public MoviesAdapter(Context context, ArrayList<Movie> movies)
+    public MoviesAdapter(IPressBox context, ArrayList<Movie> movies)
     {
-        super(context, R.layout.component_movie_for_list);
+        super(context.getContext(), R.layout.component_movie_for_list);
         this.context = context;
         this.listOfMovie = movies;
-        this.inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = (LayoutInflater) this.context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         this.defaultBm = imageLoader.loadImageSync("https://cs4.pikabu.ru/images/previews_comm/2015-06_2/14339500161051.png");
     }
@@ -76,10 +76,7 @@ public class MoviesAdapter extends ArrayAdapter {
         l.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DetailsActivity.class);
-                assert m != null;
-                intent.putExtra("filmId", m.id);
-                context.startActivity(intent);
+                context.onClick(m.id);
             }
         });
 

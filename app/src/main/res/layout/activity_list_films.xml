@@ -37,17 +37,11 @@
         app:rcAnimationSpeedScale="1"
         />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/listMovieFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/lightGray">
-
-        <ListView
-            android:id="@+id/moviesSpace"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        android:background="@color/lightGray"/>
 
 
-    </LinearLayout>
 </LinearLayout>

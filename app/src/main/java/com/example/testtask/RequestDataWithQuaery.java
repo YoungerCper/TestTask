@@ -30,10 +30,12 @@ public class RequestDataWithQuaery extends Thread {
 
     public void run()
     {
-        this.connectToServer.startConnecting();
         String JsonString = this.request();
-        this.parsePageCount(JsonString);
-        this.parseMovies();
+        if(JsonString != null) {
+            this.connectToServer.startConnecting();
+            this.parsePageCount(JsonString);
+            this.parseMovies();
+        }
     }
 
     private String request()

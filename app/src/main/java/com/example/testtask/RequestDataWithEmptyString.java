@@ -34,9 +34,11 @@ public class RequestDataWithEmptyString extends Thread
     public void run()
     {
         String JsonString = this.request();
-        this.connectToServer.startConnecting();
-        this.parsePageCount(JsonString);
-        this.parseMovies();
+        if(JsonString != null) {
+            this.connectToServer.startConnecting();
+            this.parsePageCount(JsonString);
+            this.parseMovies();
+        }
     }
 
     private String request()
@@ -79,7 +81,7 @@ public class RequestDataWithEmptyString extends Thread
         try {
             CountPages ans = adapter.fromJson(JsonString);
             this.countOgPages = ans.total_pages;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             this.connectToServer.finishError();
         }

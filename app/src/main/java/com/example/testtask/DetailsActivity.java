@@ -91,6 +91,8 @@ public class DetailsActivity extends AppCompatActivity {
         load.start();
     }
 
-
+   /* public void clearFragmentManager(){
+        fTrans.
+    }*/
 
 }

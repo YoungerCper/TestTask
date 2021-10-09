@@ -4,6 +4,7 @@ public class UpdateMovieListCommand
 {
     private final String query;
     private final IConnectToServer whatDo;
+    private Thread r;
 
     public UpdateMovieListCommand(IConnectToServer whatDo, String query)
     {
@@ -12,26 +13,32 @@ public class UpdateMovieListCommand
         else
             this.query = null;
         this.whatDo = whatDo;
+        this.init();
     }
 
     public UpdateMovieListCommand(IConnectToServer whatDo)
     {
         this.query = null;
         this.whatDo = whatDo;
+        this.init();
+    }
+
+    private void init(){
+        if(this.query == null)
+        {
+            this.r = new RequestDataWithEmptyString(this.whatDo);
+        }
+        else
+        {
+            this.r = new RequestDataWithQuaery(this.whatDo, query);
+        }
     }
 
     public void start()
     {
-        if(this.query == null)
-        {
-            RequestDataWithEmptyString r = new RequestDataWithEmptyString(this.whatDo);
-            r.start();
-        }
-        else
-        {
-            RequestDataWithQuaery r = new RequestDataWithQuaery(this.whatDo, query);
-            r.start();
-        }
+        this.r.start();
     }
+
+    public boolean isAlive(){return this.r.isAlive();}
 
 }
