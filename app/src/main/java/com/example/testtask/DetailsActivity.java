@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class DetailsActivity extends AppCompatActivity {
 
     private DetailsFragment detailsFragment;
-    private ErrorFragment errorFragment;
+    private ErrorFragment errorFragment = new ErrorFragment(new TryAgain());
     private FragmentTransaction fTrans;
     private LoadFragment loadFragment = new LoadFragment();
 
