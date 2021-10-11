@@ -25,9 +25,11 @@
                 android:adjustViewBounds="true"
             />
 
-            <RadioButton
+            <ImageButton
+                android:id="@+id/star"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_star_24_off"/>
         </LinearLayout>
 
         <LinearLayout

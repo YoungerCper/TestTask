@@ -64,6 +64,14 @@ public class DetailsActivity extends AppCompatActivity {
         this.loadDetails();
     }
 
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+
+        this.finish();
+    }
+
     private void loadDetails(){
         fTrans = getFragmentManager().beginTransaction();
         fTrans.remove(detailsFragment).remove(errorFragment).remove(loadFragment).add(R.id.frcnt, loadFragment);

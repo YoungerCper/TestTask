@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import androidx.core.content.ContextCompat;
+
 public class MoviesAdapter extends ArrayAdapter {
 
     private IPressBox context;
@@ -32,13 +35,16 @@ public class MoviesAdapter extends ArrayAdapter {
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private Bitmap defaultBm;
 
+    private DBHelperFavorite dbHelperFavorite;
 
-    public MoviesAdapter(IPressBox context, ArrayList<Movie> movies)
+
+    public MoviesAdapter(IPressBox context, ArrayList<Movie> movies, DBHelperFavorite dbHelperFavorite)
     {
         super(context.getContext(), R.layout.component_movie_for_list);
         this.context = context;
         this.listOfMovie = movies;
         this.inflater = (LayoutInflater) this.context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.dbHelperFavorite = dbHelperFavorite;
 
         this.defaultBm = imageLoader.loadImageSync("https://cs4.pikabu.ru/images/previews_comm/2015-06_2/14339500161051.png");
     }
@@ -79,6 +85,27 @@ public class MoviesAdapter extends ArrayAdapter {
                 context.onClick(m.id);
             }
         });
+
+        ImageButton ButtonStar = (ImageButton) view.findViewById(R.id.star);
+        ButtonStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dbHelperFavorite.checkIsDataAlreadyInDBorNotId(m.id)){
+                    dbHelperFavorite.deleteId(m.id);
+                    ButtonStar.setImageDrawable(ContextCompat.getDrawable(context.getContext().getApplicationContext(),R.drawable.ic_baseline_star_24_off));
+                }else{
+                    dbHelperFavorite.insertId(m.id);
+                    ButtonStar.setImageDrawable(ContextCompat.getDrawable(context.getContext().getApplicationContext(),R.drawable.ic_baseline_star_24));
+                }
+            }
+        });
+
+        if(this.dbHelperFavorite.checkIsDataAlreadyInDBorNotId(m.id)){
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(context.getContext().getApplicationContext(),R.drawable.ic_baseline_star_24));
+        }
+        else{
+            ButtonStar.setImageDrawable(ContextCompat.getDrawable(context.getContext().getApplicationContext(),R.drawable.ic_baseline_star_24_off));
+        }
 
         System.out.println(m.poster_path);
 

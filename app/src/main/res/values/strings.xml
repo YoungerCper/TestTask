@@ -7,6 +7,13 @@
     <string name="genres">Жанры</string>
     <string name="load">Загрузка</string>
     <string name="tryAgain">Повторить попытку</string>
+    <string name="credits">Актёры</string>
+    <string name="review">Отзывы</string>
+    <string name="created">Создан</string>
+    <string name="favorite">Добавить в избранное</string>
 
     <string name="error">Произощла какая-то ошибка, повторите попытку</string>
+    <string name="zero">Ничего не найдено</string>
+    <string name="more">Показать больше</string>
+    <string name="melee">Показать меньше</string>
 </resources>

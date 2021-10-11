@@ -28,6 +28,9 @@ public class MovieListFragment extends Fragment {
     private ListView _scrollView;
     private ArrayList<Movie> movies = null;
     private MoviesAdapter adapter;
+
+    private DBHelperFavorite dbHelperFavorite;
+
     private final Handler mProgressHandler = new Handler() {
 
         @Override
@@ -36,7 +39,7 @@ public class MovieListFragment extends Fragment {
             switch (msg.what) {
                 case 1:
                     if(!firstTime) {
-                        adapter = new MoviesAdapter(new PressBox(), movies);
+                        adapter = new MoviesAdapter(new PressBox(), movies, dbHelperFavorite);
                         _scrollView.setAdapter(adapter);
                     }
                     iProgressInteraction.setProgress(0);
@@ -125,7 +128,7 @@ public class MovieListFragment extends Fragment {
             this.newMovie.addAll(newMovies);
             movies = this.newMovie;
             Message msg;
-            msg = Message.obtain();
+            msg = new Message();
             msg.what = 2;
             msg.obj = (float)percent;
             mProgressHandler.sendMessage(msg);
@@ -143,11 +146,15 @@ public class MovieListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movie_list_fragment,
                 container, false);
+        this.dbHelperFavorite = new DBHelperFavorite(getActivity());
 
         this._scrollView = view.findViewById(R.id.moviesSpace);
 
-        adapter = new MoviesAdapter(new PressBox(), movies);
-        _scrollView.setAdapter(adapter);
+        this.adapter = new MoviesAdapter(new PressBox(), movies, this.dbHelperFavorite);
+        this._scrollView.setAdapter(adapter);
+
+
+
         return view;
     }
 

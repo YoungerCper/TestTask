@@ -27,6 +27,23 @@ public class RequestMovie<T extends MovieDetailsParent> extends Thread{
         this.aboutT = aboutT;
     }
 
+    public RequestMovie(int id, IConnectToServerDetails connectToServer, Class<T> aboutT, String classId){
+        this.idFilm = id;
+        String classIdWord = "/" + ServerConsts.WORD_IMAGES;
+        if(classId.equals("image"))classIdWord = ServerConsts.WORD_IMAGES;
+        if(classId.equals("video"))classIdWord = ServerConsts.WORD_VIDEOS;
+        if(classId.equals("review"))classIdWord = ServerConsts.WORD_REVIEWS;
+        if(classId.equals("credit"))classIdWord = ServerConsts.WORD_CREDITS;
+        this.address = ServerConsts.MAIN_PART_ADDRESS
+                + ServerConsts.WORD_MOVIE + "/"
+                + Integer.toString(this.idFilm)
+                + "/" + classIdWord + "?"
+                + ServerConsts.WORD_API_KEY + "=" + ServerConsts.API_KEY + "&"
+                + ServerConsts.LANG;
+        this.connectToServer = connectToServer;
+        this.aboutT = aboutT;
+    }
+
     @Override
     public void run(){
         String JsonString = this.connectFromAddress();

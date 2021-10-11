@@ -65,7 +65,14 @@ public class ListFilmsActivity extends AppCompatActivity {
             if(v.getId() == R.id.searchButton)
             {
                 String query = _searchInput.getText().toString();
-                movieListFragment.loadNewList(query);
+                Thread h = new Thread() {
+
+                    @Override
+                    public void run() {
+                        movieListFragment.loadNewList(query);
+                    }
+                };
+                h.start();
             }
         }
     }
